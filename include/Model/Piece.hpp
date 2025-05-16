@@ -20,8 +20,6 @@ class Piece {
   bool isPrimary() const;
 
   void setPosition(int x, int y);
-  // int getWidth() const { return w_; }
-  // int getHeight() const { return h_; }
 
   std::vector<std::pair<int, int>> getOccupiedCells() const;
   std::vector<std::pair<int, int>> getEdgeCells(int dx, int dy) const;
