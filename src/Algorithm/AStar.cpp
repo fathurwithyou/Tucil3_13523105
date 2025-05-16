@@ -1,5 +1,9 @@
 #include "Algorithm/AStar.hpp"
 
+AStar::AStar(std::shared_ptr<IHeuristic> h) : heuristic(h) {}
+
+AStar::~AStar() {}
+
 struct CompareF {
   bool operator()(const std::pair<State, int>& a,
                   const std::pair<State, int>& b) const {
@@ -8,9 +12,6 @@ struct CompareF {
     return fa > fb;
   }
 };
-
-AStar::AStar(std::shared_ptr<IHeuristic> h) : heuristic(h) {}
-AStar::~AStar() {}
 
 State AStar::solve(const Board& initialBoard,
                    const std::vector<Piece>& initialPieces) {
@@ -52,7 +53,7 @@ State AStar::solve(const Board& initialBoard,
     }
   }
 
-  std::cout << "Tidak ditemukan solusi." << std::endl;
+  printSolution(initialBoard, initialPieces, start);
   endTimer();
   return State(initialBoard, initialPieces, {}, {});
 }

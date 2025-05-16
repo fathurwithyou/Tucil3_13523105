@@ -1,15 +1,16 @@
 #include "Algorithm/UniformCostSearch.hpp"
 
+UniformCostSearch::UniformCostSearch(std::shared_ptr<IHeuristic> h)
+    : heuristic(h) {}
+
+UniformCostSearch::~UniformCostSearch() {}
+
 struct CompareG {
   bool operator()(const std::pair<State, int>& a,
                   const std::pair<State, int>& b) const {
     return ((int)a.first.path.size()) > ((int)b.first.path.size());
   }
 };
-
-UniformCostSearch::UniformCostSearch(std::shared_ptr<IHeuristic> h)
-    : heuristic(h) {}
-UniformCostSearch::~UniformCostSearch() {}
 
 State UniformCostSearch::solve(const Board& initialBoard,
                                const std::vector<Piece>& initialPieces) {
@@ -46,7 +47,7 @@ State UniformCostSearch::solve(const Board& initialBoard,
     }
   }
 
-  std::cout << "Tidak ditemukan solusi." << std::endl;
+  printSolution(initialBoard, initialPieces, start);
   endTimer();
   return State(initialBoard, initialPieces, {}, {});
 }

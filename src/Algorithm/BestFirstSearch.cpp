@@ -1,15 +1,16 @@
 #include "Algorithm/BestFirstSearch.hpp"
 
+BestFirstSearch::BestFirstSearch(std::shared_ptr<IHeuristic> h)
+    : heuristic(h) {}
+
+BestFirstSearch::~BestFirstSearch() {}
+
 struct CompareHeuristic {
   bool operator()(const std::pair<State, int>& a,
                   const std::pair<State, int>& b) const {
     return a.second > b.second;
   }
 };
-
-BestFirstSearch::BestFirstSearch(std::shared_ptr<IHeuristic> h)
-    : heuristic(h) {}
-BestFirstSearch::~BestFirstSearch() {}
 
 State BestFirstSearch::solve(const Board& initialBoard,
                              const std::vector<Piece>& initialPieces) {
@@ -20,8 +21,8 @@ State BestFirstSearch::solve(const Board& initialBoard,
       pq;
   std::unordered_set<std::string> visited;
 
-  State initialState(initialBoard, initialPieces, {}, {});
-  pq.push({initialState, heuristic->evaluate(initialBoard)});
+  State start(initialBoard, initialPieces, {}, {});
+  pq.push({start, heuristic->evaluate(initialBoard)});
 
   while (!pq.empty()) {
     auto [currentState, currentHeuristic] = pq.top();
@@ -46,7 +47,7 @@ State BestFirstSearch::solve(const Board& initialBoard,
     }
   }
 
-  std::cout << "Tidak ditemukan solusi." << std::endl;
+  printSolution(initialBoard, initialPieces, start);
   endTimer();
   return State(initialBoard, initialPieces, {}, {});
 }

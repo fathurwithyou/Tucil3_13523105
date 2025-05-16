@@ -92,7 +92,12 @@ bool Algorithm::isGoal(const State& state) {
 void Algorithm::printSolution(const Board& initialBoard,
                               const std::vector<Piece>& initialPieces,
                               const State& goalState) {
-  std::cout << "Solusi Ditemukan!" << std::endl;
+  if (goalState.path.empty()) {
+    std::cout << "Solusi tidak ditemukan." << std::endl;
+    return;
+  }
+
+  std::cout << "\nSolusi Ditemukan!" << std::endl;
   std::cout << "Papan Awal:" << std::endl;
   initialBoard.print(PRIMARY_PIECE_SYMBOL);
 
