@@ -1,0 +1,43 @@
+#ifndef __ALGORITHM_HPP__
+#define __ALGORITHM_HPP__
+
+#include <chrono>
+#include <iostream>
+#include <memory>
+#include <queue>
+#include <unordered_set>
+#include <sstream>
+#include <unordered_map>
+
+#include "Model/Board.hpp"
+#include "Model/Piece.hpp"
+#include "Model/State.hpp"
+#include "Metric/IHeuristic.hpp"
+
+class Algorithm {
+ public:
+  Algorithm();
+  virtual ~Algorithm();
+
+  virtual State solve(const Board& board, const std::vector<Piece>& pieces) = 0;
+
+  int getNodeVisitedCount() const;
+  double getExecutionTimeMs() const;
+
+ protected:
+  void startTimer();
+  void endTimer();
+
+  int nodeVisitedCount;
+  std::chrono::high_resolution_clock::time_point startTime;
+  std::chrono::high_resolution_clock::time_point endTime;
+  void reconstructPath();
+  bool isGoal(const State& state);
+  void printSolution(const Board& initialBoard,
+                     const std::vector<Piece>& initialPieces,
+                     const State& goalState);
+  std::vector<State> expand(const State& currentState);
+  bool canMove(const Board& board, const Piece& piece, int dx, int dy);
+};
+
+#endif  // __ALGORITHM_HPP__
