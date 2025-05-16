@@ -63,7 +63,7 @@ void FileProcessor::loadFromFile(const std::string& fileName, Board& board,
   if ((int)lines.size() > height) {
     auto pos = lines[0].find('K');
     if (pos != string::npos) {
-      board.setExit(pos, 0);
+      board.setExit(pos + 1, 0);
       lines.erase(lines.begin());
     } else {
       auto pos = lines.back().find('K');
@@ -76,7 +76,7 @@ void FileProcessor::loadFromFile(const std::string& fileName, Board& board,
       i++;
     }
     if (lines[i][0] == 'K') {
-      board.setExit(0, i);
+      board.setExit(0, i + 1);
       lines[i].erase(lines[i].begin());
     } else {
       board.setExit(width + 1, i + 1);
@@ -118,7 +118,7 @@ void FileProcessor::loadFromFile(const std::string& fileName, Board& board,
   cout << "Exiting position: (" << board.getExit().first << ", "
        << board.getExit().second << ")\n";
   board.setPosition(board.getExit().first, board.getExit().second, 'K');
-
+  board.print();
   file.close();
 }
 
