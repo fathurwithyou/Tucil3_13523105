@@ -36,7 +36,7 @@ void Board::print() const {
 }
 
 bool Board::isSafe(int x, int y) const {
-  return (x >= 1 && x < static_cast<int>(w_) && y >= 1 &&
+  return (x >= 0 && x < static_cast<int>(w_) && y >= 0 &&
           y < static_cast<int>(h_) &&
           (board_[y][x] == EMPTY_SYMBOL || board_[y][x] == EXIT_SYMBOL));
 }
