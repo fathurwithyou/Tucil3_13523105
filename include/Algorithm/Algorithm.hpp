@@ -5,14 +5,14 @@
 #include <iostream>
 #include <memory>
 #include <queue>
-#include <unordered_set>
 #include <sstream>
 #include <unordered_map>
+#include <unordered_set>
 
+#include "Metric/IHeuristic.hpp"
 #include "Model/Board.hpp"
 #include "Model/Piece.hpp"
 #include "Model/State.hpp"
-#include "Metric/IHeuristic.hpp"
 
 class Algorithm {
  public:

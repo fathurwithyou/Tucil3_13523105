@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <unordered_set>
 
-#include "Model/Board.hpp"
 #include "Metric/IHeuristic.hpp"
+#include "Model/Board.hpp"
 
 /**
  * Heuristic combining distance and count of direct blockers.

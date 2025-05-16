@@ -7,8 +7,8 @@ struct CompareHeuristic {
   }
 };
 
-BestFirstSearch::BestFirstSearch(std::shared_ptr<IHeuristic> h) : heuristic(h) {
-}
+BestFirstSearch::BestFirstSearch(std::shared_ptr<IHeuristic> h)
+    : heuristic(h) {}
 BestFirstSearch::~BestFirstSearch() {}
 
 State BestFirstSearch::solve(const Board& initialBoard,

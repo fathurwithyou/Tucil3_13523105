@@ -18,23 +18,10 @@ class FileProcessor {
             int& heuristicChoice);
   void loadFromFile(const std::string& fileName, Board& board,
                     std::vector<Piece>& pieces);
-
   void save(const std::vector<std::string>& moveLog,
-            const std::vector<Board>& history, double time, int nodes,
-            const std::string& fileName);
-  void saveToFile(const std::string& fileName,
-                  const std::vector<Board>& history,
-                  const std::vector<std::string>& moveLog, double time,
-                  int nodes);
+            const std::vector<Board>& history, double time, int nodes);
 
  private:
-  std::string ltrim(const std::string& s) {
-    return std::string(
-        std::find_if(s.begin(), s.end(),
-                     [](unsigned char ch) { return !std::isspace(ch); }),
-        s.end());
-  }
-
   std::string rtrim(const std::string& s) {
     return std::string(s.begin(),
                        std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {

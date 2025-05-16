@@ -1,7 +1,6 @@
 #ifndef __BEST_FIRST_SEARCH_HPP__
 #define __BEST_FIRST_SEARCH_HPP__
 
-
 #include "Algorithm/Algorithm.hpp"
 
 class BestFirstSearch : public Algorithm {

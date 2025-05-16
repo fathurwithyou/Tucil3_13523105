@@ -14,7 +14,6 @@
 #include "Model/FileProcessor.hpp"
 
 void displayOpeningGimmick() {
-// Membersihkan terminal sebelumnya
 #ifdef _WIN32
   system("cls");
 #else
@@ -94,10 +93,7 @@ int main() {
   const auto& history = solution.history;
   int nodeCount = algorithm->getNodeVisitedCount();
 
-  std::string outputName;
-  std::cout << "Simpan hasil sebagai (mis. hasil1.txt): ";
-  std::cin >> outputName;
-  fileProcessor.save(pathSteps, history, timeMs, nodeCount, outputName);
+  fileProcessor.save(pathSteps, history, timeMs, nodeCount);
 
   return 0;
 }

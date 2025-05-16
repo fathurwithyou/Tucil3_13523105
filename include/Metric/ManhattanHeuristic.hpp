@@ -4,8 +4,8 @@
 
 #include <cstdlib>
 
-#include "Model/Board.hpp"
 #include "Metric/IHeuristic.hpp"
+#include "Model/Board.hpp"
 
 /**
  * Simple admissible heuristic: horizontal distance of primary car to exit.

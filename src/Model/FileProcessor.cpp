@@ -123,17 +123,14 @@ void FileProcessor::loadFromFile(const std::string& fileName, Board& board,
 
 void FileProcessor::save(const std::vector<std::string>& moveLog,
                          const std::vector<Board>& history, double time,
-                         int nodes, const std::string& fileName) {
-  saveToFile(fileName, history, moveLog, time, nodes);
-}
+                         int nodes) {
+  std::string outputName;
+  std::cout << "Simpan hasil sebagai (mis. hasil1.txt): ";
+  std::cin >> outputName;
 
-void FileProcessor::saveToFile(const std::string& fileName,
-                               const std::vector<Board>& history,
-                               const std::vector<std::string>& moveLog,
-                               double time, int nodes) {
-  ofstream file("test/output/" + fileName);
+  ofstream file("test/output/" + outputName);
   if (!file.is_open()) {
-    cerr << "Gagal menyimpan ke file: test/output/" << fileName << endl;
+    cerr << "Gagal menyimpan ke file: test/output/" << outputName << endl;
     return;
   }
 
@@ -154,4 +151,6 @@ void FileProcessor::saveToFile(const std::string& fileName,
   }
 
   file.close();
+
+  cout << "Hasil disimpan di: test/output/" << outputName << endl;
 }
