@@ -7,36 +7,24 @@ BlockingHeuristic::~BlockingHeuristic() {}
 
 int BlockingHeuristic::evaluate(const Board& board) const {
   auto [exitX, exitY] = board.getExit();
-  int primaryY = -1;
-  int rightmostX = -1;
-  int height = board.getHeight();
   int width = board.getWidth();
+  int height = board.getHeight();
 
-  for (int y = 0; y < height; ++y) {
-    for (int x = 0; x < width; ++x) {
-      if (board.getPosition(x, y) == 'P') {
-        if (primaryY < 0) primaryY = y;
-        rightmostX = std::max(rightmostX, x);
-      }
+  std::unordered_set<char> blockers;
+
+  if (exitX == 0 || exitX == width - 1) {
+    for (int x = 1; x < width - 1; ++x) {
+      char c = board.getPosition(x, exitY);
+      if (c != '.' && c != 'K' && c != 'P') blockers.insert(c);
     }
   }
-  if (primaryY < 0) return 0;
 
-  int h = 0;
-  if (primaryY == exitY) {
-    int dist = std::abs(exitX - rightmostX);
-    h += dist;
-
-    std::unordered_set<char> blockers;
-    int start = std::min(rightmostX + 1, exitX);
-    // int end = std::max(rightmostX + 1, exitX);
-    for (int x = start; x < exitX; ++x) {
-      char c = board.getPosition(x, primaryY);
-      if (c != '.' && c != 'K') blockers.insert(c);
+  if (exitY == 0 || exitY == height - 1) {
+    for (int y = 1; y < height - 1; ++y) {
+      char c = board.getPosition(exitX, y);
+      if (c != '.' && c != 'K' && c != 'P') blockers.insert(c);
     }
-    h += static_cast<int>(blockers.size());
-  } else {
-    h = std::abs(exitX - rightmostX) + std::abs(exitY - primaryY);
   }
-  return h;
+
+  return static_cast<int>(blockers.size());
 }
