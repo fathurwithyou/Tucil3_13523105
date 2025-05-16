@@ -94,7 +94,7 @@ void Algorithm::printSolution(const Board& initialBoard,
                               const State& goalState) {
   std::cout << "Solusi Ditemukan!" << std::endl;
   std::cout << "Papan Awal:" << std::endl;
-  initialBoard.print();
+  initialBoard.print(PRIMARY_PIECE_SYMBOL);
 
   Board temp = initialBoard.clone();
   auto pieces = initialPieces;
@@ -134,11 +134,16 @@ void Algorithm::printSolution(const Board& initialBoard,
     }
 
     std::cout << "\nLangkah " << i + 1 << ": " << mv << std::endl;
-    temp.print();
+    temp.print(sym);
   }
 
   std::cout << "\nPapan Akhir:" << std::endl;
-  temp.print();
+  temp.print(PRIMARY_PIECE_SYMBOL);
+
+  std::cout << "\nTotal langkah: " << goalState.path.size() << std::endl;
+  std::cout << "Total simpul dikunjungi: " << nodeVisitedCount
+            << std::endl;
+  std::cout << "Waktu eksekusi: " << getExecutionTimeMs() << " ms" << std::endl;
 }
 
 bool Algorithm::canMove(const Board& board, const Piece& piece, int dx,

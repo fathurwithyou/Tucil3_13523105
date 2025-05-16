@@ -115,10 +115,9 @@ void FileProcessor::loadFromFile(const std::string& fileName, Board& board,
 
     pieces.emplace_back(Piece(symbol, x0, y0, length, orientation, isPrimary));
   }
-  cout << "Exiting position: (" << board.getExit().first << ", "
-       << board.getExit().second << ")\n";
+
   board.setPosition(board.getExit().first, board.getExit().second, 'K');
-  board.print();
+
   file.close();
 }
 
@@ -126,9 +125,6 @@ void FileProcessor::save(const std::vector<std::string>& moveLog,
                          const std::vector<Board>& history, double time,
                          int nodes, const std::string& fileName) {
   saveToFile(fileName, history, moveLog, time, nodes);
-  cout << "Solusi berhasil disimpan ke test/output/" << fileName << endl;
-  cout << "Waktu eksekusi: " << time << " ms\n";
-  cout << "Node dikunjungi: " << nodes << endl;
 }
 
 void FileProcessor::saveToFile(const std::string& fileName,

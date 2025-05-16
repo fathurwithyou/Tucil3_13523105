@@ -26,10 +26,17 @@ char Board::getPosition(int x, int y) const {
   return board_[y][x];
 }
 
-void Board::print() const {
+void Board::print(const char MOVED_PIECE_SYMBOL) const {
   for (const auto& row : board_) {
     for (char c : row) {
-      cout << c;
+      if (c == PRIMARY_PIECE_SYMBOL)
+        std::cout << RED << c << RESET;
+      else if (c == EXIT_SYMBOL)
+        std::cout << GREEN << c << RESET;
+      else if (c == MOVED_PIECE_SYMBOL)
+        std::cout << YELLOW << c << RESET;
+      else
+        std::cout << c;
     }
     cout << endl;
   }
