@@ -20,7 +20,7 @@ class Board {
   int getWidth() const { return w_; }
   int getHeight() const { return h_; }
 
-  void print() const;
+  void print(char) const;
   bool isSafe(int x, int y) const;
   Board clone() const;
   void setExit(int, int);
