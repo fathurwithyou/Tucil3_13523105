@@ -1,6 +1,10 @@
 # Config
 .vscode/
 
+# Bin
+bin/
+obj/
+
 # Prerequisites
 *.d
 
