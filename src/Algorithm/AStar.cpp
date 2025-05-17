@@ -31,6 +31,7 @@ State AStar::solve(const Board& initialBoard,
     open.pop();
     std::string key = cur.serialize();
     int g = (int)cur.path.size();
+    nodeVisitedCount++;
 
     if (bestG[key] < g) continue;
 
