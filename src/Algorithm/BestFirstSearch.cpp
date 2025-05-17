@@ -47,7 +47,7 @@ State BestFirstSearch::solve(const Board& initialBoard,
     }
   }
 
-  printSolution(initialBoard, initialPieces, start);
   endTimer();
+  printSolution(initialBoard, initialPieces, start);
   return State(initialBoard, initialPieces, {}, {});
 }

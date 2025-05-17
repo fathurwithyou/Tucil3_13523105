@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Algorithm/AStar.hpp"
+#include "Algorithm/BeamSearch.hpp"
 #include "Algorithm/BestFirstSearch.hpp"
 #include "Algorithm/UniformCostSearch.hpp"
 #include "Metric/BlockingHeuristic.hpp"
@@ -81,6 +82,11 @@ int main() {
     algorithm = std::make_unique<UniformCostSearch>(heuristic);
   } else if (algorithmChoice == 3) {
     algorithm = std::make_unique<AStar>(heuristic);
+  } else if (algorithmChoice == 4) {
+    int beamWidth;
+    std::cout << "Masukkan lebar beam: ";
+    std::cin >> beamWidth;
+    algorithm = std::make_unique<BeamSearch>(heuristic, beamWidth);
   }
 
   auto startClock = std::chrono::high_resolution_clock::now();

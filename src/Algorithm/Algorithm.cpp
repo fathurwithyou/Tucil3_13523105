@@ -94,6 +94,10 @@ void Algorithm::printSolution(const Board& initialBoard,
                               const State& goalState) {
   if (goalState.path.empty()) {
     std::cout << "Solusi tidak ditemukan." << std::endl;
+    std::cout << "\nTotal langkah: " << goalState.path.size() << std::endl;
+    std::cout << "Total simpul dikunjungi: " << nodeVisitedCount << std::endl;
+    std::cout << "Waktu eksekusi: " << getExecutionTimeMs() << " ms"
+              << std::endl;
     return;
   }
 

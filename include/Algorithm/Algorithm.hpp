@@ -8,6 +8,7 @@
 #include <sstream>
 #include <unordered_map>
 #include <unordered_set>
+#include <algorithm>
 
 #include "Metric/IHeuristic.hpp"
 #include "Model/Board.hpp"
@@ -25,12 +26,12 @@ class Algorithm {
   double getExecutionTimeMs() const;
 
  protected:
-  void startTimer();
-  void endTimer();
-
   int nodeVisitedCount;
   std::chrono::high_resolution_clock::time_point startTime;
   std::chrono::high_resolution_clock::time_point endTime;
+
+  void startTimer();
+  void endTimer();
   void reconstructPath();
   bool isGoal(const State& state);
   void printSolution(const Board& initialBoard,

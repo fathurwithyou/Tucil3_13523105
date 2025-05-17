@@ -21,10 +21,11 @@ void FileProcessor::load(Board& board, std::vector<Piece>& pieces,
   cout << "1. Greedy Best First Search\n";
   cout << "2. Uniform Cost Search\n";
   cout << "3. A* Search\n";
+  cout << "4. Beam Search\n";
   do {
-    cout << "Pilihan Anda (1-3): ";
+    cout << "Pilihan Anda (1-4): ";
     cin >> algorithmChoice;
-  } while (algorithmChoice < 1 || algorithmChoice > 3);
+  } while (algorithmChoice < 1 || algorithmChoice > 4);
 
   cout << "Pilih Heuristik:\n";
   cout << "1. Blocking Heuristic\n";
@@ -44,81 +45,102 @@ void FileProcessor::loadFromFile(const std::string& fileName, Board& board,
     cerr << "Gagal membuka file: test/input/" << fileName << endl;
     exit(1);
   }
-  int height, width, pieceCount;
-  file >> height >> width;
-  file.ignore();
-  board = Board(width + 2, height + 2);
-  file >> pieceCount;
-  file.ignore();
+  try {
+    int height, width, pieceCount;
+    file >> height >> width;
+    file.ignore();
+    board = Board(width + 2, height + 2);
+    file >> pieceCount;
+    file.ignore();
 
-  vector<string> lines;
-  string line;
+    vector<string> lines;
+    string line;
 
-  while (getline(file, line)) {
-    line = trim(line);
-    if (line.empty()) continue;
-    lines.push_back(line);
-  }
+    while (getline(file, line)) {
+      line = trim(line);
+      if (line.empty()) continue;
+      lines.push_back(line);
+    }
 
-  if ((int)lines.size() > height) {
-    auto pos = lines[0].find('K');
-    if (pos != string::npos) {
-      board.setExit(pos + 1, 0);
-      lines.erase(lines.begin());
+    if ((int)lines.size() > height) {
+      auto pos = lines[0].find('K');
+      if (pos != string::npos) {
+        board.setExit(pos + 1, 0);
+        lines.erase(lines.begin());
+      } else {
+        auto pos = lines.back().find('K');
+        if (pos == string::npos) {
+          throw std::runtime_error("Tidak ada posisi keluar yang ditemukan");
+        }
+        board.setExit(pos + 1, height + 1);
+        lines.pop_back();
+      }
     } else {
-      auto pos = lines.back().find('K');
-      board.setExit(pos + 1, height + 1);
-      lines.pop_back();
-    }
-  } else {
-    int i = 0;
-    while (i < (int)lines.size() && (int)lines[i].size() == width) {
-      i++;
-    }
-    if (lines[i][0] == 'K') {
-      board.setExit(0, i + 1);
-      lines[i].erase(lines[i].begin());
-    } else {
-      board.setExit(width + 1, i + 1);
-      lines[i].erase(lines[i].end() - 1);
-    }
-  }
-
-  for (int y = 0; y < height; ++y) {
-    for (int x = 0; x < width; ++x) {
-      char c = lines[y][x];
-      board.setPosition(x + 1, y + 1, c);
-    }
-  }
-
-  unordered_map<char, vector<pair<int, int>>> piecePositions;
-  for (int y = 0; y < height; ++y) {
-    for (int x = 0; x < width; ++x) {
-      char c = lines[y][x];
-      if (c != '.' && c != 'K') {
-        piecePositions[c].emplace_back(x + 1, y + 1);
+      int i = 0;
+      while (i < (int)lines.size() && (int)lines[i].size() == width) {
+        i++;
+      }
+      if (i == (int)lines.size()) {
+        throw std::runtime_error("Tidak ada posisi keluar yang ditemukan");
+      }
+      if (lines[i][0] == 'K') {
+        board.setExit(0, i + 1);
+        lines[i].erase(lines[i].begin());
+      } else {
+        board.setExit(width + 1, i + 1);
+        lines[i].erase(lines[i].end() - 1);
       }
     }
+    if ((int)lines.size() != height) {
+      throw std::runtime_error("Jumlah baris tidak sesuai dengan tinggi papan");
+    }
+
+    for (int y = 0; y < height; ++y) {
+      for (int x = 0; x < width; ++x) {
+        if ((int)lines[y].size() != width) {
+          throw std::out_of_range(
+              "Jumlah kolom tidak sesuai dengan lebar papan");
+        }
+        char c = lines[y][x];
+        board.setPosition(x + 1, y + 1, c);
+      }
+    }
+
+    unordered_map<char, vector<pair<int, int>>> piecePositions;
+    for (int y = 0; y < height; ++y) {
+      for (int x = 0; x < width; ++x) {
+        char c = lines[y][x];
+        if (c != '.' && c != 'K') {
+          piecePositions[c].emplace_back(x + 1, y + 1);
+        }
+      }
+    }
+
+    for (const auto& [symbol, coords] : piecePositions) {
+      if (coords.size() < 1) continue;
+      bool isPrimary = (symbol == 'P');
+
+      int x0 = coords[0].first;
+      int y0 = coords[0].second;
+      int length = coords.size();
+
+      Orientation orientation =
+          (length > 1 && coords[0].first == coords[1].first) ? VERTICAL
+                                                             : HORIZONTAL;
+
+      pieces.emplace_back(
+          Piece(symbol, x0, y0, length, orientation, isPrimary));
+    }
+
+    board.setPosition(board.getExit().first, board.getExit().second, 'K');
+
+    file.close();
+  } catch (const std::exception& e) {
+    std::cerr << "Error saat memproses file: " << fileName << endl;
+    std::cerr << "Pastikan format file sesuai dengan yang diharapkan.\n";
+    std::cerr << e.what() << '\n';
+    exit(1);
   }
-
-  for (const auto& [symbol, coords] : piecePositions) {
-    if (coords.size() < 1) continue;
-    bool isPrimary = (symbol == 'P');
-
-    int x0 = coords[0].first;
-    int y0 = coords[0].second;
-    int length = coords.size();
-
-    Orientation orientation = (length > 1 && coords[0].first == coords[1].first)
-                                  ? VERTICAL
-                                  : HORIZONTAL;
-
-    pieces.emplace_back(Piece(symbol, x0, y0, length, orientation, isPrimary));
-  }
-
-  board.setPosition(board.getExit().first, board.getExit().second, 'K');
-
-  file.close();
 }
 
 void FileProcessor::save(const std::vector<std::string>& moveLog,
