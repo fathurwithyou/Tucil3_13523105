@@ -116,6 +116,14 @@ void FileProcessor::loadFromFile(const std::string& fileName, Board& board,
       }
     }
 
+    if(piecePositions.count('P') == 0) {
+      throw std::runtime_error("Tidak ada potongan utama yang ditemukan");
+    }
+
+    if(piecePositions.size() != pieceCount + 1){
+      throw std::runtime_error("Jumlah potongan tidak sesuai dengan yang diharapkan");
+    }
+
     for (const auto& [symbol, coords] : piecePositions) {
       if (coords.size() < 1) continue;
       bool isPrimary = (symbol == 'P');
